@@ -22,7 +22,6 @@ public class CurvedShaderController : MonoBehaviour
         Shader.SetGlobalFloat("_Dist", _distance);
     }
 
-#if !UNITY_EDITOR
     private IEnumerator Start()
     {
         yield return new WaitForEndOfFrame();
@@ -32,9 +31,7 @@ public class CurvedShaderController : MonoBehaviour
             SetValues(new Vector4(0,0,0,0), 100);
         }
     }
-#endif
 
-#if UNITY_EDITOR
     // Update is called once per frame
     private void Update()
     {
@@ -45,6 +42,9 @@ public class CurvedShaderController : MonoBehaviour
             SetValues(new Vector4(0,0,0,0), 100);
         }
     }
-#endif
+
+    public void SetOffset(Vector4 curvature){
+        offset = curvature;
+    }
 
 }

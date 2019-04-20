@@ -22,6 +22,8 @@ Shader "Custom/Curved/CurvedShader" {
 
 				#pragma vertex vert
 				#pragma fragment frag
+				#pragma multi_compile_fog
+
 				#include "UnityCG.cginc"
 				#include "Common.cginc"
 
@@ -39,9 +41,16 @@ Shader "Custom/Curved/CurvedShader" {
 				uniform float4 _MainTex_ST;
 				uniform float3 _CameraPosition;
 
+				struct appdata
+				{
+					float4 vertex : POSITION;
+					float2 uv : TEXCOORD0;
+				};
+
 				struct v2f {
 					float4 pos : SV_POSITION;
 					float2 uv : TEXCOORD0;
+                	UNITY_FOG_COORDS(2)
 					float camDistance : FLOAT;
 					float4 screenPos:TEXCOORD1;
 				};
@@ -73,6 +82,9 @@ Shader "Custom/Curved/CurvedShader" {
 
 					o.screenPos = ComputeScreenPos(o.pos);
 
+					
+                	UNITY_TRANSFER_FOG(o,o.pos);
+
 					return o;
 				}
 
@@ -96,7 +108,10 @@ Shader "Custom/Curved/CurvedShader" {
 					clip(_Transparency * _Color.a - thresholdMatrix[fmod(pos.x, 4)] * _RowAccess[fmod(pos.y, 4)]);
 					#endif
 
-					return color *_Color * float4(float3(i.camDistance, i.camDistance, i.camDistance) *_CamColorDistModifier, 1.0f);
+					
+                	UNITY_APPLY_FOG(i.fogCoord, color);
+
+					return color *_Color;
 				}
 				ENDCG
 			}
