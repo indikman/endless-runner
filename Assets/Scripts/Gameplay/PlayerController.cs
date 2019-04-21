@@ -17,6 +17,9 @@ public class PlayerController : MonoBehaviour
     [Header("Down or Slide")]
     public float downTime;
 
+    [Header("Game Controller")]
+    public GameObject GameController;
+
 
     //other private variables
     private bool isUp;
@@ -68,6 +71,17 @@ public class PlayerController : MonoBehaviour
            // Debug.Log("Change!");
         }else{
             //Slide animation or slide down bool
+        }
+    }
+
+
+
+    //COLLISIONS
+
+    void OnTriggerEnter(Collider other){
+        if(other.tag == Utils.ITEM_TAG){
+            //pass collider object to game comtroller
+            GameController.GetComponent<GameplayController>().hitItems(other.gameObject);
         }
     }
 

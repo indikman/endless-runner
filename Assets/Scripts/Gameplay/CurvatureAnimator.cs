@@ -31,7 +31,7 @@ public class CurvatureAnimator : MonoBehaviour
 
             deltaX = (Random.Range(0f,1f) < 0.5f ? -1:1)* speed/100;
             deltaY = (Random.Range(0f,1f) < 0.5f ? -1:1)* speed/100;
-            Debug.Log("Offset Changed! "  + deltaX + "  " + deltaY);
+            //Debug.Log("Offset Changed! "  + deltaX + "  " + deltaY);
         }
     }
 

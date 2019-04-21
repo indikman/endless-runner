@@ -14,7 +14,7 @@ public class GameplayController : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(SpawnObstacles());
+        ////StartCoroutine(SpawnObstacles());
     }
 
     public IEnumerator SpawnObstacles()
@@ -35,4 +35,28 @@ public class GameplayController : MonoBehaviour
         GlobalVariables.platformMovementSpeed = floorSpeed;
     }
 
+
+    public void refreshItems(GameObject itemPanel){
+        itemPanel.GetComponent<ItemsManagement>().applyItemPattern(1, 50);
+        itemPanel.GetComponent<ItemsManagement>().applyItemPattern(2, 50);
+        itemPanel.GetComponent<ItemsManagement>().applyItemPattern(3, 50);
+    }
+
+    public void hitItems(GameObject hitObject){
+        if(hitObject.GetComponent<ItemController>().itemType == Utils.item.coin){
+            //Got a Coin!
+            GetComponent<ItemController>().clear();
+
+            //Particl
+
+            //Score
+
+        }else if (hitObject.GetComponent<ItemController>().itemType == Utils.item.obstacle_jump){
+            //game over
+        }else if (hitObject.GetComponent<ItemController>().itemType == Utils.item.obstacle_slide){
+            //if player is sliding - no worries, else, gameover
+
+        }
+
+    }
 }

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 230994904724968639}
   m_Layer: 0
-  m_Name: Obstacle_box1
+  m_Name: Obstacle_box2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -88,7 +88,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 06a8e00478e7b3d46ac2a54c86b6340e, type: 2}
+  - {fileID: 2100000, guid: 0c86d74ed30257f4fa6ff1be40d45d73, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
