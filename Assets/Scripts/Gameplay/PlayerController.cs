@@ -82,6 +82,8 @@ public class PlayerController : MonoBehaviour
         if(other.tag == Utils.ITEM_TAG){
             //pass collider object to game comtroller
             GameController.GetComponent<GameplayController>().hitItems(other.gameObject);
+        }else if (other.tag == Utils.POWERUP_TAG){
+            GameController.GetComponent<GameplayController>().hitPowerUp(other.gameObject);
         }
     }
 

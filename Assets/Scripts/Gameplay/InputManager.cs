@@ -92,46 +92,60 @@ public class InputManager : MonoBehaviour
 
     void leftMovement()
     {
-        //jumpleft
-        if (Utils.current == Utils.lane.middle)
+        if (GlobalVariables.isRunning)
         {
-            GetComponent<CameraController>().moveCameraSide(0);
-            player.GetComponent<PlayerController>().movePlayerSide(0);
-            Utils.current = Utils.lane.left;
-        }
-        else if (Utils.current == Utils.lane.right)
-        {
-            GetComponent<CameraController>().moveCameraSide(1);
-            player.GetComponent<PlayerController>().movePlayerSide(1);
-            Utils.current = Utils.lane.middle;
+            //jumpleft
+            if (Utils.current == Utils.lane.middle)
+            {
+                GetComponent<CameraController>().moveCameraSide(0);
+                player.GetComponent<PlayerController>().movePlayerSide(0);
+                Utils.current = Utils.lane.left;
+            }
+            else if (Utils.current == Utils.lane.right)
+            {
+                GetComponent<CameraController>().moveCameraSide(1);
+                player.GetComponent<PlayerController>().movePlayerSide(1);
+                Utils.current = Utils.lane.middle;
+            }
         }
     }
 
     void rightMovement()
     {
+
         //jumpright
-        if (Utils.current == Utils.lane.middle)
+        if (GlobalVariables.isRunning)
         {
-            GetComponent<CameraController>().moveCameraSide(2);
-            player.GetComponent<PlayerController>().movePlayerSide(2);
-            Utils.current = Utils.lane.right;
+            if (Utils.current == Utils.lane.middle)
+            {
+                GetComponent<CameraController>().moveCameraSide(2);
+                player.GetComponent<PlayerController>().movePlayerSide(2);
+                Utils.current = Utils.lane.right;
+            }
+            else if (Utils.current == Utils.lane.left)
+            {
+                GetComponent<CameraController>().moveCameraSide(1);
+                player.GetComponent<PlayerController>().movePlayerSide(1);
+                Utils.current = Utils.lane.middle;
+            }
         }
-        else if (Utils.current == Utils.lane.left)
-        {
-            GetComponent<CameraController>().moveCameraSide(1);
-            player.GetComponent<PlayerController>().movePlayerSide(1);
-            Utils.current = Utils.lane.middle;
-        }
+
     }
 
     void upMovement()
     {
-        player.GetComponent<PlayerController>().jump();
+        if (GlobalVariables.isRunning)
+        {
+            player.GetComponent<PlayerController>().jump();
+        }
     }
 
     void downMovement()
     {
-        //slide or get to ground
-        player.GetComponent<PlayerController>().downOrSlide();
+        if (GlobalVariables.isRunning)
+        {
+            //slide or get to ground
+            player.GetComponent<PlayerController>().downOrSlide();
+        }
     }
 }

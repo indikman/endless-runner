@@ -39,7 +39,7 @@ public class ItemsManagement : MonoBehaviour
         for (int i = 0; i < 4; i++) //since the start is given earlier
         {
             rnd = Random.Range(0, 100);
-            pattern += (rnd <= x ? ",c" : ",o");
+            pattern += (rnd >= x ? ",c" : ",o");
         }
 
         return pattern;
@@ -51,7 +51,7 @@ public class ItemsManagement : MonoBehaviour
 
         string pattern = itemPatternGenerate(x);
         string[] itemstring = pattern.Split(',');
-        Debug.Log("lane - " + lane + " - " + pattern);
+        //Debug.Log("lane - " + lane + " - " + pattern);
 
 
         for (int i = 0; i < itemstring.Length; i++)
@@ -60,7 +60,7 @@ public class ItemsManagement : MonoBehaviour
 
             if (itemstring[i] == "c")
             {
-                if (Random.Range(0, 100) >= 20)
+                if (Random.Range(0, 100) >= Utils.COIN_THRESHOLD)
                 {
                     for (int j = 0; j < 10; j++)
                     {
@@ -83,7 +83,7 @@ public class ItemsManagement : MonoBehaviour
                 for (int j = 0; j < 10; j++)
                 {
                     //randomly assign an obstacle
-                    if (Random.Range(0, 100) >= 80)
+                    if (Random.Range(0, 100) >= Utils.OBSTACLE_THRESHOLD)
                     {
                         //obstacle
                         objs[j + (10 * i) + (lane - 1) * GlobalVariables.itemsInALane].gameObject.GetComponent<ItemController>().setItem("obstacle");
@@ -102,5 +102,9 @@ public class ItemsManagement : MonoBehaviour
         }
     }
 
-    //public void clearObstacles()
+    public void clearObstacles(){
+        foreach(GameObject o in objs){
+            o.GetComponent<ItemController>().setItem("empty");
+        }
+    }
 }

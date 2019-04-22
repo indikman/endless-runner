@@ -44,4 +44,8 @@ public class CameraController : MonoBehaviour
         }
 
     }
+
+    public void Shake(){
+        cam.DOShakePosition(1.0f, 1, 10, 90, false, true);
+    }
 }

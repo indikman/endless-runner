@@ -8,5 +8,10 @@ public static class GlobalVariables
 
     //Gameplay variables
     public static int scoreMultiplier = 1;
+
+    public static bool isRunning = false;
+
     
+    
+
 }

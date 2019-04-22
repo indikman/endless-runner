@@ -28,7 +28,7 @@ public class PlatformController : MonoBehaviour
 
         if (type == platformType.item)
         {
-            GetComponent<GameplayController>().refreshItems(platform1);
+            GetComponent<GameplayController>().clearItemPanel(platform1); // starting panel will be cleared
             GetComponent<GameplayController>().refreshItems(platform2);
         }
 
@@ -72,6 +72,6 @@ public class PlatformController : MonoBehaviour
     [System.Serializable]
     public enum platformType
     {
-        floor, item
+        floor, item, environment
     }
 }
