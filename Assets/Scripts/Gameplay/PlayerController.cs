@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Down or Slide")]
     public float downTime;
+    public float slideTime;
 
     [Header("Game Controller")]
     public GameObject GameController;
@@ -28,17 +29,8 @@ public class PlayerController : MonoBehaviour
     {
         floorPos = transform.position.y;
         isUp = false;
+        Utils.isSliding = false;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-
-        
-    }
-
-//    Sequence jumpEase = DOTween.Sequence();
 
 
     public void movePlayerSide(int pos)
@@ -57,27 +49,35 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    Coroutine slide_routine;
     public void downOrSlide(){
         if(isUp){
-            //jumpEase.Kill(); // remove the current jumping animation
+            //remove the current jumping animation
 
             transform.DOKill(true);
             transform.DOMoveY(floorPos, downTime).OnComplete(()=>{
                     isUp = false;
                 });
 
-            //transform.position = new Vector3(transform.position.x, floorPos, transform.position.z);
-            //isUp = false;
-           // Debug.Log("Change!");
-        }else{
+        }else if(!Utils.isSliding){
             //Slide animation or slide down bool
+            if(slide_routine!=null){
+                StopCoroutine(slide_routine);
+            }
+            slide_routine = StartCoroutine(slideRouting());
         }
+    }
+
+    IEnumerator slideRouting(){
+        Utils.isSliding = true;
+        yield return new WaitForSeconds(slideTime);
+        Utils.isSliding = false;
+        yield return null;
     }
 
 
 
     //COLLISIONS
-
     void OnTriggerEnter(Collider other){
         if(other.tag == Utils.ITEM_TAG){
             //pass collider object to game comtroller

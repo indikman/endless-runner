@@ -40,7 +40,7 @@ public class CurvatureAnimator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GlobalVariables.isRunning)
+        if (Utils.isRunning)
         {
 
 

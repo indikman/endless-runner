@@ -25,9 +25,7 @@ public class GameplayController : MonoBehaviour
     void Start()
     {
         // Game Reset
-        resetGame();
-
-
+        ResetGame();
     }
 
     IEnumerator GameStart()
@@ -41,26 +39,32 @@ public class GameplayController : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
         Debug.Log("GO!");
 
-        GlobalVariables.isRunning = true;
+        Utils.isRunning = true;
     }
 
-
-    public IEnumerator SpawnObstacles()
-    {
-        while (true)
-        {
-            GameObject obj = Instantiate(Obstacle, new Vector3(Random.Range(-4, 4), 0, ObstacleSpawnZ), Quaternion.identity);
-            //obj.GetComponent<ObstacleMovement>().speed = speed;
-
-            yield return new WaitForSeconds(1.0f);
-        }
-    }
 
     void Update()
     {
-        GlobalVariables.obstacleMovementSpeed = speed;
-        GlobalVariables.platformMovementSpeed = floorSpeed;
+        Utils.OBSTACLE_SPEED = speed;
+        Utils.SPEED = floorSpeed;
+
+        //Utils.score = (int)scoretemp;
     }
+    
+    float scoretemp;
+    void FixedUpdate(){
+        if(Utils.isRunning){
+            scoretemp += (Utils.scoreMultiplier * Utils.SPEED/100);
+            if(scoretemp >= 1){
+                scoretemp = 0;
+                Utils.score++;
+                PreferencesManager.AppendScore(1);
+            }
+        }
+            
+    }
+
+    
 
 
     public void refreshItems(GameObject itemPanel)
@@ -84,22 +88,26 @@ public class GameplayController : MonoBehaviour
 
             //Particl
 
-            //Score
+            //Score for UI
+            Utils.coin_count += (Utils.isScoreBoost == true ? Utils.coinMultiplier * 2 : Utils.coinMultiplier);
+            Utils.score += (Utils.isScoreBoost == true ? Utils.coinMultiplier * 2 : Utils.coinMultiplier);
+
+            //Score for API
+            
 
         }
         else if (hitObject.GetComponent<ItemController>().itemType == Utils.item.obstacle_jump)
         {
-            //game over
-            GetComponent<CameraController>().Shake();
-            speed = 0;
-            floorSpeed = 0;
-            GlobalVariables.isRunning = false;
+            //game over if not shield on
+            if(!Utils.isShield)
+                GameOver();
 
         }
         else if (hitObject.GetComponent<ItemController>().itemType == Utils.item.obstacle_slide)
         {
             //if player is sliding - no worries, else, gameover
-
+            if(!Utils.isShield || !Utils.isSliding)
+                GameOver();
         }
 
     }
@@ -113,15 +121,15 @@ public class GameplayController : MonoBehaviour
             //apply boost
             startBoost();
         }
-        else if (hitObject.GetComponent<PowerUpController>().powerupType == Utils.powerup.magnet)
+        else if (hitObject.GetComponent<PowerUpController>().powerupType == Utils.powerup.score)
         {
             //apply magnet
-            startMagnet();
+            startScoreBoost();
         }
         else if (hitObject.GetComponent<PowerUpController>().powerupType == Utils.powerup.coin)
         {
             //apply coin
-            Debug.Log("coin!");
+            startCoinBoost();
         }
         else if (hitObject.GetComponent<PowerUpController>().powerupType == Utils.powerup.shield)
         {
@@ -131,6 +139,17 @@ public class GameplayController : MonoBehaviour
         else if (hitObject.GetComponent<PowerUpController>().powerupType == Utils.powerup.rb)
         {
             //add RB
+            
+        }
+    }
+
+    public void generateNextPowerUp(GameObject powerUp)
+    {
+        //powerup!
+        if (Random.Range(0, 100) >= Utils.POWERUP_PROBABILITY_THRESHOLD)
+        {
+            //spawn a random powerup
+            powerUp.GetComponent<PowerUpController>().setPowerUp((Utils.powerup)Random.Range(0, System.Enum.GetValues(typeof(Utils.powerup)).Length));
         }
     }
 
@@ -138,51 +157,93 @@ public class GameplayController : MonoBehaviour
     //POWER UPS
     //BOOST
     private Coroutine boost_rouotine;
-    public void startBoost(){
-        if(boost_rouotine!=null){
-           // StopCoroutine(boost_rouotine);
+    public void startBoost()
+    {
+        if (boost_rouotine != null)
+        {
+            // StopCoroutine(boost_rouotine);
         }
         boost_rouotine = StartCoroutine(start_boost());
     }
-    IEnumerator start_boost(){
+    IEnumerator start_boost()
+    {
+
+        //set current speed to temp
+        float tempSpeed = speed;
+        float tempFloorSpeed = floorSpeed;
+        Utils.isShield = true;
+
         speed += Utils.HIGH_SPEED_ADDITION;
         floorSpeed += Utils.HIGH_SPEED_ADDITION;
         yield return new WaitForSeconds(Utils.boostTime);
-        speed -= Utils.HIGH_SPEED_ADDITION;
-        floorSpeed -= Utils.HIGH_SPEED_ADDITION;
+        speed = tempSpeed;
+        floorSpeed = tempFloorSpeed;
+        Utils.isShield = false;
     }
 
     //Magnet
-    private Coroutine magnet_rouotine;
-    public void startMagnet(){
-        if(magnet_rouotine!=null){
-            StopCoroutine(magnet_rouotine);
+    private Coroutine scoreboost_rouotine;
+    public void startScoreBoost()
+    {
+        if (scoreboost_rouotine != null)
+        {
+            StopCoroutine(scoreboost_rouotine);
         }
-        magnet_rouotine = StartCoroutine(start_magnet());
+        scoreboost_rouotine = StartCoroutine(start_scoreboost());
     }
-    IEnumerator start_magnet(){
-        yield return new WaitForSeconds(Utils.magnetTime);
+
+    IEnumerator start_scoreboost()
+    {
+        Utils.isScoreBoost = true;
+        yield return new WaitForSeconds(Utils.scoreBoostTime);
+        Utils.isScoreBoost = false;
+    }
+
+    private void startCoinBoost()
+    {
+        Utils.coin_count += Utils.coinBoostValue;
     }
 
     //Shield
     private Coroutine shield_rouotine;
-    public void startShield(){
-        if(shield_rouotine!=null){
+    public void startShield()
+    {
+        if (shield_rouotine != null)
+        {
             StopCoroutine(shield_rouotine);
         }
         shield_rouotine = StartCoroutine(start_shield());
     }
-    IEnumerator start_shield(){
+    IEnumerator start_shield()
+    {
+        Utils.isShield = true;
         yield return new WaitForSeconds(Utils.shieldTime);
+        Utils.isShield = false;
+    }
+
+    void GameOver()
+    {
+        GetComponent<CameraController>().Shake();
+        speed = 0;
+        floorSpeed = 0;
+        Utils.isRunning = false;
     }
 
 
-    public void resetGame()
+    public void ResetGame()
     {
         isPlaying = false;
-        GlobalVariables.isRunning = false;
+        Utils.isRunning = false;
         speed = Utils.START_SPEED;
         floorSpeed = Utils.START_SPEED;
+
+
+
+        Utils.score = 0;
+        scoretemp = 0;
+        Utils.isShield = false;
+
         StartCoroutine(GameStart());
     }
+
 }

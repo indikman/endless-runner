@@ -65,7 +65,7 @@ public class ItemsManagement : MonoBehaviour
                     for (int j = 0; j < 10; j++)
                     {
                         //Assign a coin
-                        objs[j + (10 * i) + (lane - 1) * GlobalVariables.itemsInALane].gameObject.GetComponent<ItemController>().setItem("coin");
+                        objs[j + (10 * i) + (lane - 1) * Utils.itemsInALane].gameObject.GetComponent<ItemController>().setItem("coin");
                     }
                 }
                 else
@@ -73,7 +73,7 @@ public class ItemsManagement : MonoBehaviour
                     //nothing
                     for (int j = 0; j < 10; j++)
                     {
-                        objs[j + (10 * i) + (lane - 1) * GlobalVariables.itemsInALane].gameObject.GetComponent<ItemController>().setItem("empty");
+                        objs[j + (10 * i) + (lane - 1) * Utils.itemsInALane].gameObject.GetComponent<ItemController>().setItem("empty");
                     }
                 }
 
@@ -86,12 +86,12 @@ public class ItemsManagement : MonoBehaviour
                     if (Random.Range(0, 100) >= Utils.OBSTACLE_THRESHOLD)
                     {
                         //obstacle
-                        objs[j + (10 * i) + (lane - 1) * GlobalVariables.itemsInALane].gameObject.GetComponent<ItemController>().setItem("obstacle");
+                        objs[j + (10 * i) + (lane - 1) * Utils.itemsInALane].gameObject.GetComponent<ItemController>().setItem("obstacle");
                     }
                     else
                     {
                         //nothing
-                        objs[j + (10 * i) + (lane - 1) * GlobalVariables.itemsInALane].gameObject.GetComponent<ItemController>().setItem("empty");
+                        objs[j + (10 * i) + (lane - 1) * Utils.itemsInALane].gameObject.GetComponent<ItemController>().setItem("empty");
                     }
                 }
             }

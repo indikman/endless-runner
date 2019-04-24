@@ -92,7 +92,7 @@ public class InputManager : MonoBehaviour
 
     void leftMovement()
     {
-        if (GlobalVariables.isRunning)
+        if (Utils.isRunning)
         {
             //jumpleft
             if (Utils.current == Utils.lane.middle)
@@ -114,7 +114,7 @@ public class InputManager : MonoBehaviour
     {
 
         //jumpright
-        if (GlobalVariables.isRunning)
+        if (Utils.isRunning)
         {
             if (Utils.current == Utils.lane.middle)
             {
@@ -134,7 +134,7 @@ public class InputManager : MonoBehaviour
 
     void upMovement()
     {
-        if (GlobalVariables.isRunning)
+        if (Utils.isRunning)
         {
             player.GetComponent<PlayerController>().jump();
         }
@@ -142,7 +142,7 @@ public class InputManager : MonoBehaviour
 
     void downMovement()
     {
-        if (GlobalVariables.isRunning)
+        if (Utils.isRunning)
         {
             //slide or get to ground
             player.GetComponent<PlayerController>().downOrSlide();

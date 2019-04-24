@@ -18,13 +18,13 @@ public class PowerUpManagement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(GlobalVariables.isRunning){
-            powerUp.transform.Translate(movementDirection * GlobalVariables.platformMovementSpeed * Time.deltaTime);
+        if(Utils.isRunning){
+            powerUp.transform.Translate(movementDirection * Utils.SPEED * Time.deltaTime);
         }
 
         if(powerUp.transform.position.z <= resetPositionZ){
             powerUp.transform.position = startPosition;
-            powerUp.GetComponent<PowerUpController>().setPowerUp(Utils.powerup.boost); // TEST
+            GetComponent<GameplayController>().generateNextPowerUp(powerUp);
         }
     }
 }

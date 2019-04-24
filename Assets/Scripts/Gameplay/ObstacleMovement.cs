@@ -16,7 +16,7 @@ public class ObstacleMovement : MonoBehaviour
         if (transform.position.z >= destroyPoristionZ)
         {
             //do movement
-            transform.Translate(movementDirection * GlobalVariables.obstacleMovementSpeed * Time.deltaTime);
+            transform.Translate(movementDirection * Utils.OBSTACLE_SPEED * Time.deltaTime);
         }
         else
         {

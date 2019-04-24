@@ -38,8 +38,8 @@ public class PlatformController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        platform1.transform.Translate(movementDirection * GlobalVariables.platformMovementSpeed * Time.deltaTime);
-        platform2.transform.Translate(movementDirection * GlobalVariables.platformMovementSpeed * Time.deltaTime);
+        platform1.transform.Translate(movementDirection * Utils.SPEED * Time.deltaTime);
+        platform2.transform.Translate(movementDirection * Utils.SPEED * Time.deltaTime);
 
         if (platform1.transform.position.z <= resetPositionZ)
         {
